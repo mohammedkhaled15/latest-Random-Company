@@ -1,0 +1,47 @@
+.googleBtn {
+  --white: #fff;
+  --google-blue: #4285f4;
+  --button-active-blue: #1669f2;
+  width: 300px;
+  max-width: 100%;
+  height: 42px;
+  background-color: var(--google-blue);
+  border-radius: 2px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.googleIconWrapper {
+  /* position: absolute; */
+  margin-top: 1px;
+  margin-left: 1px;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  background-color: var(--white);
+}
+.googleIcon {
+  /* position: absolute; */
+  margin-top: 11px;
+  margin-left: 11px;
+  width: 18px;
+  height: 18px;
+}
+.btnText {
+  color: var(--white);
+  font-size: 20px;
+  letter-spacing: 0.2px;
+  font-family: "Roboto";
+  width: calc(100% - 40px);
+  text-align: center;
+}
+.googleBtn:hover {
+  box-shadow: 0 0 6px var(--google-blue);
+}
+.googleBtn:hover {
+  background: var(--button-active-blue);
+}
+@import url(https://fonts.googleapis.com/css?family=Roboto:500);
