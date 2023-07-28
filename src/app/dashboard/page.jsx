@@ -5,25 +5,41 @@ import { useSession } from 'next-auth/react'
 import Link from "next/link"
 import Image from "next/image"
 import usewSWR from "swr"
-import Button from "@/components/button/Button"
 
 const Dashboard = () => {
   const fetcher = (...args) => fetch(...args).then(res => res.json())
   const session = useSession()
   const router = useRouter()
-  const { data, isLoading, error } = usewSWR(`/api/posts?username=${session?.data?.user.name}`, fetcher)
+  const { data, mutate, isLoading, error } = usewSWR(`/api/posts?username=${session?.data?.user.name}`, fetcher)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log("submited")
     const title = e.target[0].value
     const desc = e.target[1].value
     const summary = e.target[2].value
     const img = e.target[3].value
-    const res = await fetch("http//localhost:3000/api/post", {
-      method: "POST",
-      body: { title, desc, summary, img, username: session?.data?.user.name }
-    })
-    if (res.ok) {
-      e.target = ["", "", "", ""]
+    try {
+      await fetch("http://localhost:3000/api/posts", {
+        method: "POST",
+        body: JSON.stringify({ title, desc, summary, img, username: session?.data?.user.name })
+      })
+      mutate()
+      e.target.reset()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`/api/posts/${id}`, {
+        method: "DELETE"
+      })
+      console.log("Post Deleted")
+      mutate()
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -39,9 +55,10 @@ const Dashboard = () => {
         <h3 className={styles.title}>Welcome {session.data.user.name}</h3>
         <div className={styles.blogsContainer}>
           {
-            data?.map(blog => {
+            isLoading ? "Loading ...." : data?.map(blog => {
               return (
                 <div key={blog._id} className={styles.blog}>
+                  <div onClick={() => handleDelete(blog._id)} className={styles.delete}>X</div>
                   <div className={styles.blogText}>
                     <Link href={`/blog/${blog._id}`}>
                       <h3 className={styles.blogTitle}>{blog.title}</h3>
@@ -68,7 +85,7 @@ const Dashboard = () => {
         </div>
         <div className={styles.addPost}>
           <h4 className={styles.subTitle}>Add New Post</h4>
-          <form onSubmit={handleSubmit}>
+          <form id="form" onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label className={styles.label} htmlFor="title">Title:</label>
               <input className={styles.input} type="text" id="title" name="title" placeholder="Enter title" required />
@@ -85,7 +102,7 @@ const Dashboard = () => {
               <label className={styles.label} htmlFor="img-url">Image URL:</label>
               <input className={styles.input} type="url" id="img-url" name="img-url" placeholder="Enter image URL" required />
             </div>
-            <Button text={"Add"} />
+            <button className={styles.button}>Add</button>
           </form>
         </div>
       </div>
