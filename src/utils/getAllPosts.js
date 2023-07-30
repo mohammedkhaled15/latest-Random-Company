@@ -1,9 +1,12 @@
-import { notFound } from "next/navigation";
+import connectDb from "./connectDb";
+import Post from "@/models/Post";
 
 export const getAllPosts = async () => {
-  const res = await fetch("http://localhost:3000/api/posts");
-
-  if (!res.ok) return notFound();
-
-  return res.json();
+  try {
+    await connectDb();
+    const posts = await Post.find();
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
 };

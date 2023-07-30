@@ -20,7 +20,7 @@ const Dashboard = () => {
     const summary = e.target[2].value
     const img = e.target[3].value
     try {
-      await fetch("http://localhost:3000/api/posts", {
+      await fetch("/api/posts", {
         method: "POST",
         body: JSON.stringify({ title, desc, summary, img, username: session?.data?.user.name })
       })

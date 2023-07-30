@@ -1,9 +1,13 @@
 import { notFound } from "next/navigation";
+import connectDb from "./connectDb";
+import Post from "@/models/Post";
 
 export const getPost = async (id) => {
-  const res = await fetch(`http://localhost:3000/api/posts/${id}`);
-
-  if (!res.ok) return notFound();
-
-  return res.json();
+  try {
+    await connectDb();
+    const post = await Post.findById(id);
+    return post;
+  } catch (error) {
+    console.log(error);
+  }
 };
