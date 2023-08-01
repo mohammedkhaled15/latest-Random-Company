@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { notFound } from "next/navigation";
 import { getAllPosts } from '@/utils/getAllPosts'
 
-export const revalidate = 0
+// export const revalidate = 0
 export const metadata = {
   title: "Blog Page",
   description: "This is a Description"
@@ -15,6 +15,7 @@ export const metadata = {
 const Blog = async () => {
   const posts = await getAllPosts()
   if (!posts) return notFound()
+  // await fetch("http://localhost:3000/api/revalidate")
 
   return (
     <div className={styles.container}>

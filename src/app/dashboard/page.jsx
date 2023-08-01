@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import Link from "next/link"
 import Image from "next/image"
 import usewSWR from "swr"
+import { revalidatePath } from "next/cache"
 
 const Dashboard = () => {
   const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -24,6 +25,7 @@ const Dashboard = () => {
         method: "POST",
         body: JSON.stringify({ title, desc, summary, img, username: session?.data?.user.name })
       })
+      await fetch("http://localhost:3000/api/revalidate?path=/blog")
       mutate()
       e.target.reset()
     } catch (error) {
@@ -37,6 +39,7 @@ const Dashboard = () => {
         method: "DELETE"
       })
       console.log("Post Deleted")
+      await fetch("http://localhost:3000/api/revalidate?path=/blog")
       mutate()
     } catch (error) {
       console.log(error)

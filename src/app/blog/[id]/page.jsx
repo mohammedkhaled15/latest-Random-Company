@@ -33,9 +33,9 @@ const BlogPost = async ({ params }) => {
   )
 }
 
-// export const generateStaticParams = async () => {
-//   const blogs = await getAllPosts()
-//   return blogs.map(blog => ({ id: blog._id.toString() }))
-// }
+export const generateStaticParams = async () => {
+  const blogs = await getAllPosts()
+  return blogs.map(blog => ({ id: blog._id.toString() }))
+}
 
 export default BlogPost
